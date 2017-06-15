@@ -9,7 +9,7 @@ if os[:family] == "ubuntu"
   when "14.04"
     release_nickname = "trusty"
   else
-    fail format("unknown os[:release]: %s", os[:release])
+    raise format("unknown os[:release]: %s", os[:release])
   end
 end
 
