@@ -1,12 +1,12 @@
-require 'spec_helper'
-require 'serverspec'
+require "spec_helper"
+require "serverspec"
 
 describe package("apt-transport-https") do
   it { should be_installed }
 end
 
 describe command("apt-key list") do
-  its(:stdout) { should match(/^pub\s+2048R\/D88E42B4\s+.*$/) }
+  its(:stdout) { should match(%r{^pub\s+2048R/D88E42B4\s+.*$}) }
 end
 
 describe file("/etc/apt/sources.list.d/artifacts_elastic_co_packages_5_x_apt.list") do
