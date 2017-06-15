@@ -1,17 +1,8 @@
 require "spec_helper"
 require "serverspec"
 
-release_nickname = ""
-if os[:family] == "ubuntu"
-  case os[:release]
-  when "16.04"
-    release_nickname = "xenial"
-  when "14.04"
-    release_nickname = "trusty"
-  else
-    raise format("unknown os[:release]: %s", os[:release])
-  end
-end
+codename = Specinfra.backend.run_command("lsb_release -c")
+                            .stdout.strip.split(" ")[1]
 
 describe package("apt-transport-https") do
   it { should be_installed }
@@ -27,7 +18,7 @@ end
 
 case os[:family]
 when "ubuntu"
-  describe file("/etc/apt/sources.list.d/ppa_webupd8team_java_#{release_nickname}.list") do
-    its(:content) { should match(/^deb #{ Regexp.escape("http://ppa.launchpad.net/webupd8team/java/ubuntu") } #{release_nickname} main$/) }
+  describe file("/etc/apt/sources.list.d/ppa_webupd8team_java_#{codename}.list") do
+    its(:content) { should match(/^deb #{ Regexp.escape("http://ppa.launchpad.net/webupd8team/java/ubuntu") } #{codename} main$/) }
   end
 end
