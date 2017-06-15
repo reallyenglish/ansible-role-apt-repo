@@ -1,6 +1,17 @@
 require "spec_helper"
 require "serverspec"
 
+release_nickname = ""
+if os[:family] == "ubuntu"
+  case os[:release]
+  when "16.04"
+    release_nickname = "xenial"
+  when "14.04"
+    release_nickname = "trusty"
+  else
+  end
+end
+
 describe package("apt-transport-https") do
   it { should be_installed }
 end
@@ -15,7 +26,7 @@ end
 
 case os[:family]
 when "ubuntu"
-  describe file("/etc/apt/sources.list.d/ppa_webupd8team_java_trusty.list") do
-    its(:content) { should match(/^deb #{ Regexp.escape("http://ppa.launchpad.net/webupd8team/java/ubuntu") } trusty main$/) }
+  describe file("/etc/apt/sources.list.d/ppa_webupd8team_java_#{release_nickname}.list") do
+    its(:content) { should match(/^deb #{ Regexp.escape("http://ppa.launchpad.net/webupd8team/java/ubuntu") } #{release_nickname} main$/) }
   end
 end
