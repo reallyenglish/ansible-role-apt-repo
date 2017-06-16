@@ -2,7 +2,7 @@ require "spec_helper"
 require "serverspec"
 
 codename = Specinfra.backend.run_command("lsb_release -c")
-                            .stdout.strip.split(" ")[1]
+                    .stdout.strip.split(" ")[1]
 
 describe package("apt-transport-https") do
   it { should be_installed }
